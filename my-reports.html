@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>My Reports | Lost & Found Portal</title>
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+
+        <a href="index.html" class="brand">
+            <span class="brand-mark">L</span>
+            <span>Lost & Found</span>
+        </a>
+
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="my-reports.html" class="active">My Reports</a>
+            <a href="lost-item.html">Report Lost</a>
+            <a href="found-item.html">Report Found</a>
+        </div>
+
+    </nav>
+
+
+    <!-- HEADER -->
+    <section class="reports-header">
+
+        <div>
+            <p class="eyebrow">MY ACCOUNT</p>
+
+            <h1>My Reports</h1>
+
+            <p>
+                Manage the lost and found items you have reported.
+            </p>
+        </div>
+
+        <div class="report-actions">
+            <a href="lost-item.html" class="btn primary">
+                + Report Lost Item
+            </a>
+
+            <a href="found-item.html" class="btn secondary">
+                + Report Found Item
+            </a>
+        </div>
+
+    </section>
+
+
+    <!-- STATISTICS -->
+    <section class="report-stats">
+
+        <div class="stat-card">
+            <span>📋</span>
+            <div>
+                <strong id="totalCount">0</strong>
+                <p>Total Reports</p>
+            </div>
+        </div>
+
+        <div class="stat-card lost-stat">
+            <span>🔴</span>
+            <div>
+                <strong id="lostCount">0</strong>
+                <p>Lost</p>
+            </div>
+        </div>
+
+        <div class="stat-card found-stat">
+            <span>🟢</span>
+            <div>
+                <strong id="foundCount">0</strong>
+                <p>Found</p>
+            </div>
+        </div>
+
+        <div class="stat-card resolved-stat">
+            <span>✅</span>
+            <div>
+                <strong id="resolvedCount">0</strong>
+                <p>Resolved</p>
+            </div>
+        </div>
+
+    </section>
+
+
+    <!-- REPORTS -->
+    <main class="my-reports-container">
+
+        <div class="reports-title">
+            <h2>Your Reports</h2>
+
+            <select id="filterReports">
+                <option value="all">All Reports</option>
+                <option value="Lost">Lost</option>
+                <option value="Found">Found</option>
+                <option value="resolved">Resolved</option>
+            </select>
+        </div>
+
+        <div id="reportsGrid" class="reports-grid">
+
+            <div class="loading">
+                Loading your reports...
+            </div>
+
+        </div>
+
+    </main>
+
+
+    <script src="js/my-reports.js"></script>
+
+</body>
+</html>

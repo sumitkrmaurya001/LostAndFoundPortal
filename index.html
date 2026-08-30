@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lost & Found Portal — Lost & Found Portal</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="topbar">
+    <a class="brand" href="index.html"><span class="brand-mark">😊</span><span>Lost & Found Portal</span></a>
+    <nav>
+        <a href="#items">Browse</a>
+        <a href="#how">How it works</a>
+        <a href="lost-item.html">Report Lost</a>
+        <a href="found-item.html">Report Found</a>
+        <span id="authArea"></span>
+    </nav>
+</header>
+
+<main>
+    <section class="hero-section">
+        <div class="hero-copy">
+            <span class="eyebrow">COMMUNITY POWERED • FAST • SIMPLE</span>
+            <h1>Lost something?<br><span>Let's bring it back.</span></h1>
+            <p>Report lost or found belongings, search nearby reports, and connect with the right person without the usual hassle.</p>
+            <div class="hero-actions">
+                <a class="btn btn-primary" href="lost-item.html">I lost something <span>→</span></a>
+                <a class="btn btn-light" href="found-item.html">I found something</a>
+            </div>
+            <div class="trust-row"><span>✓ Verified accounts</span><span>✓ Secure ownership</span><span>✓ Easy search</span></div>
+        </div>
+        <div class="hero-art">
+            <div class="floating-chip chip-one">(Demo)🔎 Smart search</div>
+            <div class="floating-chip chip-two">💙 Community help</div>
+            <div class="art-card">
+                <div class="art-head"><span>RECENT MATCH(future implementation on this idea)</span><span class="live-dot">● Live</span></div>
+                <div class="match-item">
+                    <img src="images/wallet.png" alt="Wallet">
+                    <div><strong>Black Wallet</strong><small>Found • Campus Gate</small></div>
+                    <span class="match-badge">92% match</span>
+                </div>
+                <div class="mini-line"></div>
+                <div class="art-search">⌕ <span>Search lost & found items...</span></div>
+                <div class="art-tags"><span>Wallet</span><span>Mobile</span><span>Bag</span></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="stats-strip">
+        <div><strong id="totalCount">0</strong><span>Reports</span></div>
+        <div><strong id="lostCount">0</strong><span>Lost items</span></div>
+        <div><strong id="foundCount">0</strong><span>Found items</span></div>
+        <div><strong>24/7</strong><span>Community access</span></div>
+    </section>
+
+    <section class="feature-grid" id="how">
+        <article><div class="feature-icon">📸</div><h3>Post in seconds</h3><p>Add a photo, location and description so others can recognize your item.</p></article>
+        <article><div class="feature-icon">🧭</div><h3>Find smarter</h3><p>Search by name, category, type and location to narrow down reports quickly.</p></article>
+        <article><div class="feature-icon">🔐</div><h3>Your reports stay yours</h3><p>Only the account that created a report can edit or delete it.</p></article>
+    </section>
+
+    <section class="items-section" id="items">
+        <div class="section-heading">
+            <div><span class="eyebrow">COMMUNITY BOARD</span><h2>Explore reports</h2></div>
+            <a class="outline-link" href="lost-item.html">+ New report</a>
+        </div>
+        <div class="toolbar">
+            <div class="search-box"><span>⌕</span><input id="searchInput" type="search" placeholder="Search item, category or location..."></div>
+            <div class="filter-pills">
+                <button class="filter active" data-filter="All">All</button>
+                <button class="filter" data-filter="Lost">Lost</button>
+                <button class="filter" data-filter="Found">Found</button>
+            </div>
+        </div>
+        <div class="category-row">
+            <button data-category="All" class="category active-cat">All</button>
+            <button data-category="Bag" class="category">🎒 Bags</button>
+            <button data-category="Mobile" class="category">📱 Mobile</button>
+            <button data-category="Wallet" class="category">👛 Wallet</button>
+            <button data-category="ID Card" class="category">🪪 ID Card</button>
+            <button data-category="Keys" class="category">🔑 Keys</button>
+        </div>
+        <div class="cards" id="itemsContainer"><div class="loading">Loading community reports...</div></div>
+        <div id="emptyState" class="empty-state" style="display:none"><div>🕵️</div><h3>No matching reports</h3><p>Try another keyword or remove a filter.</p></div>
+    </section>
+</main>
+
+<footer class="site-footer">
+
+    <div class="footer-container">
+
+        <!-- Brand / About -->
+        <div class="footer-about">
+            <a href="index.html" class="footer-brand">
+                <span class="footer-logo">L</span>
+                <span>Lost & Found Portal</span>
+            </a>
+
+            <p>
+                A community-powered platform that helps people
+                report, find and recover their lost belongings.
+            </p>
+
+            <div class="social-links">
+                <a href="#" aria-label="Instagram">◎</a>
+                <a href="#" aria-label="Facebook">f</a>
+                <a href="#" aria-label="YouTube">▶</a>
+                <a href="#" aria-label="Twitter">𝕏</a>
+                <a href="#" aria-label="Pinterest">P</a>
+                <a href="#" aria-label="TikTok">♪</a>
+            </div>
+        </div>
+
+
+        <!-- Products -->
+        <div class="footer-column">
+            <h3>Explore</h3>
+
+            <a href="index.html">Home</a>
+            <a href="#items">Browse Reports</a>
+            <a href="lost-item.html">Report Lost Item</a>
+            <a href="found-item.html">Report Found Item</a>
+            <a href="index.html#how">How It Works</a>
+        </div>
+
+
+        <!-- Categories -->
+        <div class="footer-column">
+            <h3>Categories</h3>
+
+            <a href="index.html#items">Bags</a>
+            <a href="index.html#items">Mobile Phones</a>
+            <a href="index.html#items">Wallets</a>
+            <a href="index.html#items">ID Cards</a>
+            <a href="index.html#items">Keys</a>
+        </div>
+
+
+        <!-- Support -->
+        <div class="footer-column">
+            <h3>Support</h3>
+
+            <a href="#">Help Center</a>
+            <a href="#">Contact Us</a>
+            <a href="#">Safety & Privacy</a>
+            <a href="#">Terms of Use</a>
+            <a href="#">Report a Problem</a>
+        </div>
+
+    </div>
+
+
+    <!-- Bottom Footer -->
+    <div class="footer-bottom">
+
+        <span>
+            © 2026 Lost & Found Portal. All rights reserved.
+        </span>
+
+        <div>
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms</a>
+        </div>
+
+    </div>
+
+</footer>
+<script src="js/auth.js"></script>
+<script src="js/script.js"></script>
+</body>
+</html>
