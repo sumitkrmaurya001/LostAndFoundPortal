@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:5000";
+const API_URL = "https://lostandfound-api-fzdh.onrender.com";
 
 function getUser() {
     try { return JSON.parse(localStorage.getItem("user")) || null; } catch { return null; }

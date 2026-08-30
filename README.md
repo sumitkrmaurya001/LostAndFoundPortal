@@ -27,7 +27,7 @@ A redesigned Lost & Found Portal using HTML/CSS/JavaScript, Node.js/Express, Mon
 5. Use Live Server on `index.html`.
 6. Register a new account and login.
 
-Backend: `http://localhost:5000`
+Backend: https://lostandfound-api-fzdh.onrender.com
 
 MongoDB database: `lostandfound`
 
