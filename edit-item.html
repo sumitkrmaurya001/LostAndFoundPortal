@@ -1,0 +1,9 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Edit Report — Lost & Found Portal</title><link rel="stylesheet" href="css/style.css"></head>
+<body class="soft-page">
+<header class="topbar"><a class="brand" href="index.html"><span class="brand-mark">L</span><span>Lost & Found Portal</span></a><nav><a href="index.html">Home</a><a href="index.html#items">Browse</a><span id="authArea"></span></nav></header>
+<main class="form-page"><a class="back-link" href="index.html">← Cancel</a><div class="form-card"><div class="form-intro"><span class="eyebrow">YOUR REPORT</span><h1>Edit report</h1><p>Update your information. Ownership is checked securely by the server.</p></div><form id="editForm"><div class="form-grid"><div class="field full"><label>Item name</label><input type="text" id="itemName" required></div><div class="field"><label>Report type</label><select id="type"><option value="Lost">Lost</option><option value="Found">Found</option></select></div><div class="field"><label>Category</label><select id="category"><option>Bag</option><option>Mobile</option><option>Wallet</option><option>ID Card</option><option>Keys</option><option>Others</option></select></div><div class="field full"><label>Description</label><textarea id="description" required></textarea></div><div class="field"><label>Location</label><input type="text" id="location"></div><div class="field"><label>Date</label><input type="date" id="date"></div><div class="field"><label>Contact number</label><input type="tel" id="contact"></div><div class="field"><label>Status</label><select id="status"><option>Active</option><option>Resolved</option></select></div></div><button class="btn btn-primary wide" type="submit">Save changes</button></form></div></main>
+<script src="js/auth.js"></script>
+<script src="js/edit.js"></script>
+</body></html>
