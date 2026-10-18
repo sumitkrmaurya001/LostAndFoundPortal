@@ -16,8 +16,11 @@ cloudinary.config({
     api_secret: process.env.CLOUDINARY_API_SECRET
 });
 const PORT = process.env.PORT || 5000;
-const SESSION_SECRET = process.env.SESSION_SECRET || "lost-found-portal-change-this-secret";
+const SESSION_SECRET = process.env.SESSION_SECRET;
 
+if (!SESSION_SECRET || SESSION_SECRET.length < 32) {
+    throw new Error("SESSION_SECRET must be set to at least 32 characters");
+}
 app.use(cors());
 app.use(express.json());
 app.use("/uploads", express.static("uploads"));
@@ -81,12 +84,55 @@ function verifyToken(token) {
     }
 }
 
+
 function requireAuth(req, res, next) {
     const auth = req.headers.authorization || "";
     const token = auth.startsWith("Bearer ") ? auth.slice(7) : "";
-    const user = verifyToken(token);
-    if (!user) return res.status(401).json({ message: "Please login to continue." });
-    req.user = user;
+    const tokenUser = verifyToken(token);
+
+    if (!tokenUser) {
+        return res.status(401).json({
+            message: "Please login to continue."
+        });
+    }
+
+    User.findById(tokenUser.id)
+        .then((user) => {
+            if (!user) {
+                return res.status(401).json({
+                    message: "User account not found."
+                });
+            }
+
+            if (user.isBlocked) {
+                return res.status(403).json({
+                    message: "Your account has been blocked."
+                });
+            }
+
+            req.user = {
+                id: String(user._id),
+                name: user.name,
+                email: user.email,
+                role: user.role || "user"
+            };
+
+            next();
+        })
+        .catch((error) => {
+            console.error("Authentication error:", error);
+            res.status(500).json({
+                message: "Authentication failed."
+            });
+        });
+}
+function requireAdmin(req, res, next) {
+    if (!req.user || req.user.role !== "admin") {
+        return res.status(403).json({
+            message: "Admin access required."
+        });
+    }
+
     next();
 }
 
@@ -191,20 +237,58 @@ app.post("/api/register", async (req, res) => {
 app.post("/api/login", async (req, res) => {
     try {
         const { email, password } = req.body;
-        const user = await User.findOne({ email: email.toLowerCase().trim() });
-        if (!user) return res.status(400).json({ message: "User not found" });
+
+        if (!email || !password) {
+            return res.status(400).json({
+                message: "Please enter email and password."
+            });
+        }
+
+        const user = await User.findOne({
+            email: email.toLowerCase().trim()
+        });
+
+        if (!user) {
+            return res.status(400).json({
+                message: "Invalid email or password."
+            });
+        }
 
         const valid = await bcrypt.compare(password, user.password);
-        if (!valid) return res.status(400).json({ message: "Invalid password" });
 
-        const safeUser = { id: user._id, name: user.name, email: user.email };
-        res.json({ message: "Login successful", user: safeUser, token: createToken(user) });
+        if (!valid) {
+            return res.status(400).json({
+                message: "Invalid email or password."
+            });
+        }
+
+        if (user.isBlocked) {
+            return res.status(403).json({
+                message: "Your account has been blocked."
+            });
+        }
+
+        const safeUser = {
+            id: user._id,
+            name: user.name,
+            email: user.email,
+            role: user.role || "user"
+        };
+
+        res.json({
+            message: "Login successful",
+            user: safeUser,
+            token: createToken(user)
+        });
+
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: "Server error" });
+        console.error("Login error:", error);
+
+        res.status(500).json({
+            message: "Server error"
+        });
     }
 });
-
 // -------------------- OWNER-ONLY EDIT --------------------
 app.put("/api/items/:id", requireAuth, async (req, res) => {
     try {
@@ -243,6 +327,61 @@ app.delete("/api/items/:id", requireAuth, async (req, res) => {
 });
 
 app.get("/api/health", (req, res) => res.json({ ok: true }));
+
+// TEMPORARY: Remove this route after admin setup.
+app.post("/api/admin/setup-once", async (req, res) => {
+    try {
+        const suppliedSecret = req.headers["x-admin-setup-secret"];
+        const expectedSecret = process.env.ADMIN_SETUP_SECRET;
+        const newPassword = process.env.ADMIN_PASSWORD;
+
+        if (!expectedSecret || !newPassword) {
+            return res.status(503).json({
+                message: "Admin setup is not configured."
+            });
+        }
+
+        if (
+            typeof suppliedSecret !== "string" ||
+            suppliedSecret !== expectedSecret
+        ) {
+            return res.status(403).json({
+                message: "Invalid setup secret."
+            });
+        }
+
+        if (newPassword.length < 12) {
+            return res.status(400).json({
+                message: "Admin password must be at least 12 characters."
+            });
+        }
+
+        const email = "admin01@gmail.com";
+        const user = await User.findOne({ email });
+
+        if (!user) {
+            return res.status(404).json({
+                message: "Admin account not found. Register first."
+            });
+        }
+
+        user.password = await bcrypt.hash(newPassword, 10);
+        user.role = "admin";
+        user.isBlocked = false;
+
+        await user.save();
+
+        return res.json({
+            message: "Admin account setup successful.",
+            email: user.email
+        });
+    } catch (error) {
+        console.error("Admin setup error:", error);
+        return res.status(500).json({
+            message: "Admin setup failed."
+        });
+    }
+});
 
 app.listen(PORT, "0.0.0.0", () => {
     console.log(`Server running on port ${PORT}`);
