@@ -329,60 +329,7 @@ app.delete("/api/items/:id", requireAuth, async (req, res) => {
 app.get("/api/health", (req, res) => res.json({ ok: true }));
 
 // TEMPORARY: Remove this route after admin setup.
-app.post("/api/admin/setup-once", async (req, res) => {
-    try {
-        const suppliedSecret = req.headers["x-admin-setup-secret"];
-        const expectedSecret = process.env.ADMIN_SETUP_SECRET;
-        const newPassword = process.env.ADMIN_PASSWORD;
-
-        if (!expectedSecret || !newPassword) {
-            return res.status(503).json({
-                message: "Admin setup is not configured."
-            });
-        }
-
-        if (
-            typeof suppliedSecret !== "string" ||
-            suppliedSecret !== expectedSecret
-        ) {
-            return res.status(403).json({
-                message: "Invalid setup secret."
-            });
-        }
-
-        if (newPassword.length < 12) {
-            return res.status(400).json({
-                message: "Admin password must be at least 12 characters."
-            });
-        }
-
-        const email = "admin01@gmail.com";
-        const user = await User.findOne({ email });
-
-        if (!user) {
-            return res.status(404).json({
-                message: "Admin account not found. Register first."
-            });
-        }
-
-        user.password = await bcrypt.hash(newPassword, 10);
-        user.role = "admin";
-        user.isBlocked = false;
-
-        await user.save();
-
-        return res.json({
-            message: "Admin account setup successful.",
-            email: user.email
-        });
-    } catch (error) {
-        console.error("Admin setup error:", error);
-        return res.status(500).json({
-            message: "Admin setup failed."
-        });
-    }
-});
-
+// TEMPORARY: Remove this route after admin setup.
 app.listen(PORT, "0.0.0.0", () => {
     console.log(`Server running on port ${PORT}`);
 });
