@@ -135,6 +135,13 @@ function requireAdmin(req, res, next) {
 
     next();
 }
+// Verify admin access
+app.get("/api/admin/verify", requireAuth, requireAdmin, (req, res) => {
+    res.json({
+        isAdmin: true,
+        message: "Admin access verified successfully."
+    });
+});
 
 mongoose.connect(process.env.MONGODB_URI)
     .then(() => console.log("MongoDB connected successfully"))
