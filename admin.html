@@ -147,6 +147,34 @@
                 Checking admin access...
             </p>
         </section>
+        
+<!-- USER MANAGEMENT SECTION -->
+<section class="admin-section" id="usersSection" hidden>
+    <h2>User Management</h2>
+
+    <p id="usersMessage">Loading users...</p>
+
+    <div style="overflow-x:auto;">
+        <table style="width:100%; border-collapse:collapse; min-width:650px;">
+            <thead>
+                <tr>
+                    <th style="padding:12px; text-align:left;">Name</th>
+                    <th style="padding:12px; text-align:left;">Email</th>
+                    <th style="padding:12px; text-align:left;">Phone</th>
+                    <th style="padding:12px; text-align:left;">Role</th>
+                    <th style="padding:12px; text-align:left;">Status</th>
+                    <th style="padding:12px; text-align:left;">Action</th>
+                </tr>
+            </thead>
+            <tbody id="usersTableBody"></tbody>
+        </table>
+    </div>
+
+    <button class="admin-btn" id="backToManagement">
+        Back to Management
+    </button>
+</section>
+
     </main>
 
     <script src="js/admin.js"></script>
