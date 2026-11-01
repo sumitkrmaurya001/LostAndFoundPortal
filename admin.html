@@ -1,0 +1,154 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | Lost & Found</title>
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        .admin-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .admin-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .admin-card {
+            padding: 24px;
+            border-radius: 12px;
+            background: #ffffff;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+        }
+
+        .admin-card h3 {
+            margin-top: 0;
+        }
+
+        .admin-number {
+            font-size: 30px;
+            font-weight: bold;
+            margin: 10px 0 0;
+        }
+
+        .admin-section {
+            margin-top: 25px;
+            padding: 24px;
+            border-radius: 12px;
+            background: #ffffff;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+        }
+
+        .admin-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        .admin-btn {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            background: #173f5f;
+            color: white;
+        }
+
+        .admin-btn:hover {
+            opacity: 0.85;
+        }
+
+        .admin-message {
+            margin-top: 15px;
+            color: #b42318;
+        }
+
+        body {
+            background: #f4f6f9;
+        }
+    </style>
+</head>
+
+<body>
+    <main class="admin-container">
+        <header class="admin-header">
+            <div>
+                <h1>Admin Dashboard</h1>
+                <p>Lost & Found Portal Management</p>
+            </div>
+
+            <button class="admin-btn" id="logoutBtn">
+                Logout
+            </button>
+        </header>
+
+        <section class="admin-stats">
+            <article class="admin-card">
+                <h3>Total Users</h3>
+                <p class="admin-number" id="totalUsers">—</p>
+            </article>
+
+            <article class="admin-card">
+                <h3>Lost Reports</h3>
+                <p class="admin-number" id="lostReports">—</p>
+            </article>
+
+            <article class="admin-card">
+                <h3>Found Reports</h3>
+                <p class="admin-number" id="foundReports">—</p>
+            </article>
+
+            <article class="admin-card">
+                <h3>Pending Claims</h3>
+                <p class="admin-number" id="pendingClaims">—</p>
+            </article>
+        </section>
+
+        <section class="admin-section">
+            <h2>Management</h2>
+            <p>Choose what you want to manage.</p>
+
+            <div class="admin-actions">
+                <button class="admin-btn" data-section="users">
+                    Manage Users
+                </button>
+
+                <button class="admin-btn" data-section="reports">
+                    Manage Reports
+                </button>
+
+                <button class="admin-btn" data-section="claims">
+                    Manage Claims
+                </button>
+
+                <button class="admin-btn" data-section="complaints">
+                    Complaints
+                </button>
+            </div>
+
+            <p id="adminMessage" class="admin-message">
+                Checking admin access...
+            </p>
+        </section>
+    </main>
+
+    <script src="js/admin.js"></script>
+</body>
+</html>

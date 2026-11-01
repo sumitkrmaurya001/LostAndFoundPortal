@@ -1,3 +1,4 @@
+
 const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema({
@@ -9,7 +10,9 @@ const userSchema = new mongoose.Schema({
     email: {
         type: String,
         required: true,
-        unique: true
+        unique: true,
+        lowercase: true,
+        trim: true
     },
 
     phone: {
@@ -20,6 +23,17 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true
+    },
+
+    role: {
+        type: String,
+        enum: ["user", "admin"],
+        default: "user"
+    },
+
+    isBlocked: {
+        type: Boolean,
+        default: false
     }
 });
 
