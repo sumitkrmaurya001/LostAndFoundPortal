@@ -369,6 +369,81 @@ app.get("/api/health", (req, res) => res.json({ ok: true }));
 
 // TEMPORARY: Remove this route after admin setup.
 // TEMPORARY: Remove this route after admin setup.
+
+// GET ALL USERS — Admin only
+app.get("/api/admin/users", requireAuth, requireAdmin, async (req, res) => {
+    try {
+        const users = await User.find()
+            .select("-password")
+            .sort({ name: 1 })
+            .lean();
+
+        res.json({ success: true, users });
+    } catch (error) {
+        console.error("Fetch users error:", error);
+        res.status(500).json({
+            message: "Unable to fetch users."
+        });
+    }
+});
+
+
+// BLOCK / UNBLOCK USER — Admin only
+app.patch("/api/admin/users/:id/block", requireAuth, requireAdmin, async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { isBlocked } = req.body;
+
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(400).json({
+                message: "Invalid user ID."
+            });
+        }
+
+        if (typeof isBlocked !== "boolean") {
+            return res.status(400).json({
+                message: "isBlocked must be true or false."
+            });
+        }
+
+        if (id === req.user.id) {
+            return res.status(400).json({
+                message: "You cannot block your own account."
+            });
+        }
+
+        const user = await User.findById(id);
+
+        if (!user) {
+            return res.status(404).json({
+                message: "User not found."
+            });
+        }
+
+        if (user.role === "admin") {
+            return res.status(403).json({
+                message: "Admin accounts cannot be blocked."
+            });
+        }
+
+        user.isBlocked = isBlocked;
+        await user.save();
+
+        res.json({
+            success: true,
+            message: isBlocked
+                ? "User blocked successfully."
+                : "User unblocked successfully."
+        });
+
+    } catch (error) {
+        console.error("Block user error:", error);
+        res.status(500).json({
+            message: "Unable to update user status."
+        });
+    }
+});
+
 app.listen(PORT, "0.0.0.0", () => {
     console.log(`Server running on port ${PORT}`);
 });
