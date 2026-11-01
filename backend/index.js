@@ -143,6 +143,38 @@ app.get("/api/admin/verify", requireAuth, requireAdmin, (req, res) => {
     });
 });
 
+app.get(
+    "/api/admin/stats",
+    requireAuth,
+    requireAdmin,
+    async (req, res) => {
+        try {
+            const totalUsers = await User.countDocuments();
+
+            const lostReports = await Item.countDocuments({
+                status: { $regex: /^lost$/i }
+            });
+
+            const foundReports = await Item.countDocuments({
+                status: { $regex: /^found$/i }
+            });
+
+            res.json({
+                totalUsers,
+                lostReports,
+                foundReports,
+                pendingClaims: 0
+            });
+        } catch (error) {
+            console.error("Admin stats error:", error);
+            res.status(500).json({
+                message: "Could not load dashboard statistics."
+            });
+        }
+    }
+);
+
+
 mongoose.connect(process.env.MONGODB_URI)
     .then(() => console.log("MongoDB connected successfully"))
     .catch((err) => console.log("MongoDB Error:", err));
