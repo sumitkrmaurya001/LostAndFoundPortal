@@ -492,6 +492,43 @@ app.get("/api/admin/reports", requireAuth, requireAdmin, async (req, res) => {
         });
     }
 });
+// UPDATE REPORT STATUS — Admin only
+app.put("/api/admin/reports/:id/status", requireAuth, requireAdmin, async (req, res) => {
+    try {
+        const { status } = req.body;
+
+        if (!["Active", "Resolved"].includes(status)) {
+            return res.status(400).json({
+                message: "Invalid report status."
+            });
+        }
+
+        const report = await Item.findByIdAndUpdate(
+            req.params.id,
+            { status },
+            { new: true, runValidators: true }
+        );
+
+        if (!report) {
+            return res.status(404).json({
+                message: "Report not found."
+            });
+        }
+
+        res.json({
+            success: true,
+            message: `Report marked as ${status}.`,
+            report
+        });
+
+    } catch (error) {
+        console.error("Update report status error:", error);
+
+        res.status(500).json({
+            message: "Unable to update report status."
+        });
+    }
+});
 
 
 app.listen(PORT, "0.0.0.0", () => {
