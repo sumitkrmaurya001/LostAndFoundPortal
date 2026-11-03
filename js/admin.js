@@ -309,9 +309,13 @@ viewBtn.addEventListener("click", () => {
     const modal = document.getElementById("reportDetailsModal");
     const content = document.getElementById("reportDetailsContent");
 
+    if (!modal || !content) {
+        alert("Report details modal not found!");
+        return;
+    }
+
     content.replaceChildren();
 
-    // Report Image
     if (item.image && item.image.startsWith("http")) {
         const img = document.createElement("img");
         img.src = item.image;
@@ -322,7 +326,6 @@ viewBtn.addEventListener("click", () => {
         content.appendChild(img);
     }
 
-    // Report Information
     const details = [
         ["Item Name", item.name],
         ["Type", item.type],
@@ -343,8 +346,20 @@ viewBtn.addEventListener("click", () => {
         content.appendChild(p);
     });
 
-   modal.removeAttribute("hidden");
-modal.style.display = "flex";
+    modal.hidden = false;
+
+    Object.assign(modal.style, {
+        display: "flex",
+        position: "fixed",
+        top: "0",
+        left: "0",
+        width: "100vw",
+        height: "100vh",
+        zIndex: "99999",
+        alignItems: "center",
+        justifyContent: "center",
+        background: "rgba(0,0,0,0.7)"
+    });
 });
 
 actionCell.appendChild(viewBtn);
