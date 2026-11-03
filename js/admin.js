@@ -413,6 +413,56 @@ statusBtn.addEventListener("click", async () => {
 });
 
 actionCell.appendChild(statusBtn);
+// Delete Report Button
+const deleteBtn = document.createElement("button");
+
+deleteBtn.textContent = "Delete";
+deleteBtn.type = "button";
+deleteBtn.className = "admin-btn";
+deleteBtn.style.background = "#b42318";
+deleteBtn.style.marginLeft = "8px";
+
+deleteBtn.addEventListener("click", async () => {
+
+    if (!confirm(`Are you sure you want to delete "${item.name}"?`)) {
+        return;
+    }
+
+    const token =
+        localStorage.getItem("token") ||
+        localStorage.getItem("authToken");
+
+    deleteBtn.disabled = true;
+    deleteBtn.textContent = "Deleting...";
+
+    try {
+        const response = await fetch(
+            `${API_URL}/api/admin/reports/${item._id}`,
+            {
+                method: "DELETE",
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        );
+
+        const result = await response.json();
+
+        if (!response.ok) {
+            throw new Error(result.message || "Delete failed.");
+        }
+
+        alert(result.message);
+        loadReports();
+
+    } catch (error) {
+        alert(error.message);
+        deleteBtn.disabled = false;
+        deleteBtn.textContent = "Delete";
+    }
+});
+
+actionCell.appendChild(deleteBtn);
             row.appendChild(actionCell);
 
             reportsTableBody.appendChild(row);

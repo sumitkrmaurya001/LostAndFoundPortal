@@ -529,7 +529,30 @@ app.put("/api/admin/reports/:id/status", requireAuth, requireAdmin, async (req, 
         });
     }
 });
+// DELETE REPORT — Admin only
+app.delete("/api/admin/reports/:id", requireAuth, requireAdmin, async (req, res) => {
+    try {
+        const report = await Item.findByIdAndDelete(req.params.id);
 
+        if (!report) {
+            return res.status(404).json({
+                message: "Report not found."
+            });
+        }
+
+        res.json({
+            success: true,
+            message: "Report deleted successfully."
+        });
+
+    } catch (error) {
+        console.error("Delete report error:", error);
+
+        res.status(500).json({
+            message: "Unable to delete report."
+        });
+    }
+});
 
 app.listen(PORT, "0.0.0.0", () => {
     console.log(`Server running on port ${PORT}`);
