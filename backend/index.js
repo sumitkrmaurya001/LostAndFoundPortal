@@ -444,6 +444,56 @@ app.patch("/api/admin/users/:id/block", requireAuth, requireAdmin, async (req, r
     }
 });
 
+// -------------------- ADMIN REPORT MANAGEMENT --------------------
+
+// GET ALL REPORTS — Admin only
+app.get("/api/admin/reports", requireAuth, requireAdmin, async (req, res) => {
+    try {
+        const filter = {};
+
+        // Filter by Lost or Found
+        if (req.query.type) {
+            if (!["Lost", "Found"].includes(req.query.type)) {
+                return res.status(400).json({
+                    message: "Invalid report type."
+                });
+            }
+
+            filter.type = req.query.type;
+        }
+
+        // Filter by Active or Resolved
+        if (req.query.status) {
+            if (!["Active", "Resolved"].includes(req.query.status)) {
+                return res.status(400).json({
+                    message: "Invalid report status."
+                });
+            }
+
+            filter.status = req.query.status;
+        }
+
+        const reports = await Item.find(filter)
+            .populate("ownerId", "name email")
+            .sort({ createdAt: -1 })
+            .lean();
+
+        res.json({
+            success: true,
+            totalReports: reports.length,
+            reports
+        });
+
+    } catch (error) {
+        console.error("Admin reports error:", error);
+
+        res.status(500).json({
+            message: "Unable to fetch reports."
+        });
+    }
+});
+
+
 app.listen(PORT, "0.0.0.0", () => {
     console.log(`Server running on port ${PORT}`);
 });
