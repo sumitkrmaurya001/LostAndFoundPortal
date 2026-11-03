@@ -201,6 +201,13 @@ async function updateUserStatus(userId, isBlocked) {
 const reportsSection = document.getElementById("reportsSection");
 const reportsTableBody = document.getElementById("reportsTableBody");
 const reportsMessage = document.getElementById("reportsMessage");
+// Close Report Details Modal
+document.getElementById("closeReportModal")
+    .addEventListener("click", () => {
+        const modal = document.getElementById("reportDetailsModal");
+        modal.hidden = true;
+        modal.style.display = "none";
+    });
 
 document.querySelector('[data-section="reports"]')
     .addEventListener("click", loadReports);
@@ -291,6 +298,55 @@ async function loadReports() {
             });
 
             const actionCell = document.createElement("td");
+            // View Report Details Button
+const viewBtn = document.createElement("button");
+
+viewBtn.textContent = "View Details";
+viewBtn.className = "admin-btn";
+
+viewBtn.addEventListener("click", () => {
+    const modal = document.getElementById("reportDetailsModal");
+    const content = document.getElementById("reportDetailsContent");
+
+    content.replaceChildren();
+
+    // Report Image
+    if (item.image && item.image.startsWith("http")) {
+        const img = document.createElement("img");
+        img.src = item.image;
+        img.alt = item.name || "Item image";
+        img.style.width = "100%";
+        img.style.maxHeight = "220px";
+        img.style.objectFit = "contain";
+        content.appendChild(img);
+    }
+
+    // Report Information
+    const details = [
+        ["Item Name", item.name],
+        ["Type", item.type],
+        ["Category", item.category],
+        ["Location", item.location],
+        ["Description", item.description],
+        ["Owner", item.ownerId?.name || item.ownerName],
+        ["Owner Email", item.ownerId?.email],
+        ["Status", item.status],
+        ["Created Date", item.createdAt
+            ? new Date(item.createdAt).toLocaleString()
+            : "Not available"]
+    ];
+
+    details.forEach(([label, value]) => {
+        const p = document.createElement("p");
+        p.textContent = `${label}: ${value || "Not available"}`;
+        content.appendChild(p);
+    });
+
+    modal.hidden = false;
+    modal.style.display = "flex";
+});
+
+actionCell.appendChild(viewBtn);
            // Status Action Button
 const statusBtn = document.createElement("button");
 
