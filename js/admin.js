@@ -302,6 +302,7 @@ async function loadReports() {
 const viewBtn = document.createElement("button");
 
 viewBtn.textContent = "View Details";
+viewBtn.type = "button";
 viewBtn.className = "admin-btn";
 
 viewBtn.addEventListener("click", () => {
@@ -342,8 +343,8 @@ viewBtn.addEventListener("click", () => {
         content.appendChild(p);
     });
 
-    modal.hidden = false;
-    modal.style.display = "flex";
+   modal.removeAttribute("hidden");
+modal.style.display = "flex";
 });
 
 actionCell.appendChild(viewBtn);
