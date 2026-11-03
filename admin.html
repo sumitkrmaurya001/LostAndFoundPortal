@@ -175,6 +175,65 @@
     </button>
 </section>
 
+<!-- ADMIN REPORT MANAGEMENT SECTION -->
+<section class="admin-section" id="reportsSection" hidden>
+
+    <h2>Manage Reports</h2>
+
+    <p id="reportsMessage">Loading reports...</p>
+
+    <!-- Report Filters -->
+    <div class="admin-actions">
+
+        <select id="reportTypeFilter">
+            <option value="">All Reports</option>
+            <option value="Lost">Lost Only</option>
+            <option value="Found">Found Only</option>
+        </select>
+
+        <select id="reportStatusFilter">
+            <option value="">All Status</option>
+            <option value="Active">Active</option>
+            <option value="Resolved">Resolved</option>
+        </select>
+
+        <button class="admin-btn" id="filterReportsBtn">
+            Apply Filters
+        </button>
+
+    </div>
+
+    <!-- Reports Table -->
+    <div style="overflow-x:auto; margin-top:20px;">
+
+        <table style="width:100%; border-collapse:collapse; min-width:1000px;">
+
+            <thead>
+                <tr>
+                    <th style="padding:12px; text-align:left;">Image</th>
+                    <th style="padding:12px; text-align:left;">Item Name</th>
+                    <th style="padding:12px; text-align:left;">Type</th>
+                    <th style="padding:12px; text-align:left;">Category</th>
+                    <th style="padding:12px; text-align:left;">Location</th>
+                    <th style="padding:12px; text-align:left;">Owner</th>
+                    <th style="padding:12px; text-align:left;">Status</th>
+                    <th style="padding:12px; text-align:left;">Action</th>
+                </tr>
+            </thead>
+
+            <tbody id="reportsTableBody"></tbody>
+
+        </table>
+
+    </div>
+
+    <button class="admin-btn" id="backFromReports">
+        Back to Management
+    </button>
+
+</section>
+
+
     </main>
 
     <script src="js/admin.js"></script>

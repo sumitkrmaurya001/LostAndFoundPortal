@@ -196,6 +196,113 @@ async function updateUserStatus(userId, isBlocked) {
     }
 }
 
+// ---------------- ADMIN REPORT MANAGEMENT ----------------
+
+const reportsSection = document.getElementById("reportsSection");
+const reportsTableBody = document.getElementById("reportsTableBody");
+const reportsMessage = document.getElementById("reportsMessage");
+
+document.querySelector('[data-section="reports"]')
+    .addEventListener("click", loadReports);
+
+document.getElementById("filterReportsBtn")
+    .addEventListener("click", loadReports);
+
+document.getElementById("backFromReports")
+    .addEventListener("click", () => {
+        reportsSection.hidden = true;
+    });
+
+async function loadReports() {
+    const token =
+        localStorage.getItem("token") ||
+        localStorage.getItem("authToken");
+
+    reportsSection.hidden = false;
+    reportsMessage.textContent = "Loading reports...";
+    reportsTableBody.replaceChildren();
+
+    const params = new URLSearchParams();
+
+    const type = document.getElementById("reportTypeFilter").value;
+    const status = document.getElementById("reportStatusFilter").value;
+
+    if (type) params.append("type", type);
+    if (status) params.append("status", status);
+
+    try {
+        const response = await fetch(
+            `${API_URL}/api/admin/reports?${params.toString()}`,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.message || "Unable to load reports.");
+        }
+
+        reportsMessage.textContent = `Total reports: ${data.totalReports}`;
+
+        if (!data.reports.length) {
+            reportsMessage.textContent = "No reports found.";
+            return;
+        }
+
+        data.reports.forEach(item => {
+            const row = document.createElement("tr");
+
+            const imageCell = document.createElement("td");
+            imageCell.style.padding = "12px";
+
+            if (item.image && item.image.startsWith("http")) {
+                const img = document.createElement("img");
+                img.src = item.image;
+                img.alt = item.name || "Item image";
+                img.style.width = "60px";
+                img.style.height = "60px";
+                img.style.objectFit = "cover";
+                imageCell.appendChild(img);
+            } else {
+                imageCell.textContent = "No image";
+            }
+
+            row.appendChild(imageCell);
+
+            const ownerName =
+                item.ownerId?.name || item.ownerName || "Unknown";
+
+            [
+                item.name,
+                item.type,
+                item.category,
+                item.location,
+                ownerName,
+                item.status
+            ].forEach(value => {
+                const cell = document.createElement("td");
+                cell.style.padding = "12px";
+                cell.textContent = value || "—";
+                row.appendChild(cell);
+            });
+
+            const actionCell = document.createElement("td");
+            actionCell.textContent = "Actions coming next";
+            row.appendChild(actionCell);
+
+            reportsTableBody.appendChild(row);
+        });
+
+    } catch (error) {
+        reportsMessage.textContent = error.message;
+        console.error("Admin reports error:", error);
+    }
+}
+
 verifyAdmin();
 
 
