@@ -291,7 +291,56 @@ async function loadReports() {
             });
 
             const actionCell = document.createElement("td");
-            actionCell.textContent = "Actions coming next";
+           // Status Action Button
+const statusBtn = document.createElement("button");
+
+statusBtn.textContent =
+    item.status === "Active" ? "Mark Resolved" : "Reopen";
+
+statusBtn.className = "admin-btn";
+
+statusBtn.addEventListener("click", async () => {
+    const newStatus =
+        item.status === "Active" ? "Resolved" : "Active";
+
+    const token =
+        localStorage.getItem("token") ||
+        localStorage.getItem("authToken");
+
+    statusBtn.disabled = true;
+    statusBtn.textContent = "Updating...";
+
+    try {
+        const response = await fetch(
+            `${API_URL}/api/admin/reports/${item._id}/status`,
+            {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                },
+                body: JSON.stringify({ status: newStatus })
+            }
+        );
+
+        const result = await response.json();
+
+        if (!response.ok) {
+            throw new Error(result.message || "Update failed.");
+        }
+
+        alert(result.message);
+        loadReports();
+
+    } catch (error) {
+        alert(error.message);
+        statusBtn.disabled = false;
+        statusBtn.textContent =
+            item.status === "Active" ? "Mark Resolved" : "Reopen";
+    }
+});
+
+actionCell.appendChild(statusBtn);
             row.appendChild(actionCell);
 
             reportsTableBody.appendChild(row);
